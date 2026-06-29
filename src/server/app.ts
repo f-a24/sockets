@@ -1,16 +1,24 @@
-import * as express from 'express';
-import { createServer } from 'http';
-import { listen } from 'socket.io';
+import { Server } from 'socket.io';
+import { Hono } from 'hono';
+import { createAdaptorServer } from '@hono/node-server';
+import { serveStatic } from '@hono/node-server/serve-static';
+import path from 'path';
 
-const app = express();
-app.set('port', 1337);
-app.use(express.static(`${__dirname}/../client/dist`));
+const app = new Hono();
 
-const server = createServer(app);
-const io = listen(server);
+app.use('/*', serveStatic({ root: path.resolve(__dirname, '../client/dist') }));
+
+const server = createAdaptorServer({ fetch: app.fetch });
+
+server.listen(1337, () => {
+  console.log('Hono server listening on port 1337');
+});
+
+const io = new Server();
+io.attach(server);
 
 // io.sockets.on('connection', socket => {
-const chat = io.of('/chat').on('connection', socket => {
+io.of('/chat').on('connection', socket => {
   socket.on('emit_from_client', (data: { msg: string; room: string }) => {
     // socket.client.id = data.name;
     // 接続しているソケットのみ
@@ -31,10 +39,7 @@ const chat = io.of('/chat').on('connection', socket => {
   });
 });
 
-const news = io.of('/news').on('connection', socket => {
+// news
+io.of('/news').on('connection', socket => {
   socket.emit('emit_from_server', `TODAY: ${new Date()}`);
-});
-
-server.listen(app.get('port'), () => {
-  console.log(`Express server listening on port ${app.get('port')}`);
 });

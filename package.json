@@ -4,11 +4,12 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "webpack --config webpack.config.js",
+    "client:dev": "vite",
+    "client:build": "tsc -b && vite build",
+    "dev": "tsx watch src/server/app.ts",
     "lint": "eslint src/**/*.ts",
     "format": "prettier-eslint --write src/**/*.ts",
-    "precommit": "lint-staged",
-    "start": "ts-node-dev --respawn src/server/app.ts"
+    "precommit": "lint-staged"
   },
   "lint-staged": {
     "*.ts": [
@@ -17,10 +18,9 @@
     ]
   },
   "devDependencies": {
-    "@types/express": "^4.17.1",
-    "@types/node": "^12.7.5",
-    "@types/socket.io": "^2.1.2",
-    "@types/socket.io-client": "^1.4.32",
+    "@types/node": "^26.0.1",
+    "@types/socket.io": "^3.0.2",
+    "@types/socket.io-client": "^3.0.0",
     "@typescript-eslint/eslint-plugin": "^2.3.0",
     "@typescript-eslint/parser": "^2.3.0",
     "eslint": "^6.4.0",
@@ -33,16 +33,14 @@
     "prettier": "^1.18.2",
     "prettier-eslint": "^9.0.0",
     "prettier-eslint-cli": "^5.0.0",
-    "ts-loader": "^6.1.0",
-    "ts-node": "^8.4.1",
-    "ts-node-dev": "^1.0.0-pre.42",
-    "typescript": "^3.6.3",
-    "webpack": "^4.40.2",
-    "webpack-cli": "^3.3.9"
+    "tsx": "^4.22.4",
+    "typescript": "^6.0.3",
+    "vite": "^8.1.0"
   },
   "dependencies": {
-    "express": "^4.17.1",
-    "socket.io": "^2.2.0",
-    "socket.io-client": "^2.2.0"
+    "@hono/node-server": "^2.0.6",
+    "hono": "^4.12.27",
+    "socket.io": "^4.8.3",
+    "socket.io-client": "^4.8.3"
   }
 }
